@@ -4,9 +4,9 @@ import java.util.Scanner;
 public class SistemaPrenotazioni {
     public static void main(String[] args) {
 
-        int righe = 3;
-        int colonne = 8;
-        int postiTotali = righe * colonne;
+        final int RIGHE = 3;
+        final int COLONNE = 8;
+        int postiTotali = RIGHE * COLONNE;
 
         ArrayList<Integer> listaPostiRiga = new ArrayList<>();
         ArrayList<Integer> listaPostiColonna = new ArrayList<>();
@@ -18,22 +18,20 @@ public class SistemaPrenotazioni {
         while (true) {
 
             // While per l'inserimento dei dati
-            /* Controllare se i posti prenotati sono già occupati */
-
             while (true) {
 
                 // Inserimento riga con controllo
                 System.out.println("Inserisci riga tra 1 e 3: ");
                 int riga = inputInt.nextInt();
-                if (riga < 1 || riga > 3) {
-                    System.out.println("⚠️ Errore: La riga deve essere tra 1 e 3.");
+                if (riga < 1 || riga > RIGHE) {
+                    System.out.println("Errore: La riga deve essere tra 1 e 3.");
                     continue; // Torna all'inizio del ciclo
                 }
 
                 // Inserimento colonna con controllo
                 System.out.println("Inserisci colonna tra 1 e 8: ");
                 int colonna = inputInt.nextInt();
-                if (colonna < 1 || colonna > 8) {
+                if (colonna < 1 || colonna > COLONNE) {
                     System.out.println("Errore: La colonna deve essere tra 1 e 8.");
                     continue; // Torna all'inizio del ciclo
                 }
@@ -158,8 +156,8 @@ public class SistemaPrenotazioni {
 
                 // Stampa dei posti disponibili
                 System.out.println("Posti Disponibili: ");
-                for (int i = 0; i < righe; i++) {
-                    for (int j = 0; j < colonne; j++) {
+                for (int i = 0; i < RIGHE; i++) {
+                    for (int j = 0; j < COLONNE; j++) {
                         boolean occupato = false;
 
                         // Controlla se il posto è già occupato
