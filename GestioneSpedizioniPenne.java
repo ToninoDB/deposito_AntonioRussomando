@@ -123,24 +123,20 @@ public class GestioneSpedizioniPenne {
 
             } else if (scelta == 1) {
                 // Ciclo per aggiungere una spedizione
-                /*
-                 * Da aggiungere il controllo dell'inserimento dei numeri di penne inserite per
-                 * colore
-                 */
                 while (true) {
                     System.out.println("Inserisci la spedizione!");
 
-                    System.out.println("Inserisci numero penne rosse: ");
-                    int rosse = input.nextInt();
+                    System.out.println("Penne rosse!");
+                    int rosse = checkInserimentoNumeroPenne();
 
-                    System.out.println("Inserisci numero penne blu: ");
-                    int blu = input.nextInt();
+                    System.out.println("Penne blu!");
+                    int blu = checkInserimentoNumeroPenne();
 
-                    System.out.println("Inserisci numero penne verdi: ");
-                    int verdi = input.nextInt();
+                    System.out.println("Penne verdi!");
+                    int verdi = checkInserimentoNumeroPenne();
 
-                    System.out.println("Inserisci numero penne nere: ");
-                    int nere = input.nextInt();
+                    System.out.println("Penne nere!");
+                    int nere = checkInserimentoNumeroPenne();
 
                     aggiungiSpedizione(spedizioni, rosse, blu, verdi, nere);
                     break;
@@ -171,10 +167,26 @@ public class GestioneSpedizioniPenne {
                 System.out.println("Inserisci un numero tra 1 e 4 o -1 per uscire.");
         }
 
-        // Chiusura stream
+        // Chiusura scanner
         input.close();
     }
 
-    // public static void checkInserimentoNumeroPenne(int n) {}
+    @SuppressWarnings("resource")
+    public static int checkInserimentoNumeroPenne() {
+        Scanner scanner = new Scanner(System.in);
+        int n = 0;
+
+        while (true) {
+            System.out.println("Inserisci quantitativo penne: ");
+            n = scanner.nextInt();
+            if (n < 0) {
+                continue;
+            } else {
+                break;
+            }
+        }
+
+        return n;
+    }
 
 }
