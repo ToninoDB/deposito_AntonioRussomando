@@ -1,2 +1,6 @@
 # deposito_AntonioRussomando
-Qui c'è la descrizione
+Deposito esercizi e progetti in java del corso di formazione.
+
+
+
+(vabene così angelo?)
