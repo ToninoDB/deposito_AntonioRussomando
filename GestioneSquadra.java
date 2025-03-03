@@ -46,7 +46,7 @@ public class GestioneSquadra {
         }
 
         // Creazione della partita tra le due squadre
-        Partita partita = new Partita(squadre[1], squadre[2]);
+        Partita partita = new Partita(squadre[0], squadre[1]);
         partita.giocaPartita();
 
         input.close();
