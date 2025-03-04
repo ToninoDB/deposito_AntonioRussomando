@@ -1,35 +1,70 @@
-package data_04_03_2025;
-
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
     @SuppressWarnings("resource")
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        PiattoSpeciale piatto = new PiattoSpeciale();
-        piatto.mostraIngredienti();
+        ArrayList<PiattoSpeciale> ordini = new ArrayList<>();
 
         while (true) {
-            System.out.println("Scegli uno degli ingredienti del menu (oppure scrivi \'esci\' per uscire): ");
-            String ingrediente = scanner.nextLine();
+            System.out.println("Quanti panini vuoi ordinare? (Scrivi un numero oppure 'no' per uscire): ");
+            String input = scanner.nextLine();
 
-            if (ingrediente.equalsIgnoreCase("esci")) {
+            if (input.equalsIgnoreCase("no")) {
                 break;
             }
 
-            piatto.aggiungiIngrediente(ingrediente);
+            try {
+                int quantita = Integer.parseInt(input);
+                for (int i = 0; i < quantita; i++) {
+                    PiattoSpeciale piatto = new PiattoSpeciale();
+                    piatto.mostraIngredienti();
+
+                    while (true) {
+                        System.out.println("Scegli un ingrediente per il panino " + (i + 1)
+                                + " (oppure scrivi 'esci' per terminare la scelta): ");
+                        String ingrediente = scanner.nextLine();
+
+                        if (ingrediente.equalsIgnoreCase("esci")) {
+                            break;
+                        }
+                        // Ciclo di controllo che fa inserire un ingrediente finchè esiste o è
+                        // disponibile
+                        while (!piatto.isAvailable(ingrediente)) {
+                            System.out.println("Ingrediente non disponibile. Scegli un altro ingrediente: ");
+                            ingrediente = scanner.nextLine();
+                        }
+
+                        piatto.aggiungiIngrediente(ingrediente);
+
+                    }
+
+                    ordini.add(piatto);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Inserisci un numero valido o 'no' per uscire.");
+            }
         }
 
-        if (piatto.getIngredientiScelti() != null) {
-            System.out.println("Gli ingredienti scelti sono: ");
-            piatto.mostraIngredientiScelti();
+        // Stampa degli ordini
+        if (!ordini.isEmpty()) {
+            System.out.println("Riepilogo degli ordini:");
+            double totale = 0;
+            for (int i = 0; i < ordini.size(); i++) {
+                System.out.println("Panino " + (i + 1) + ":");
 
-            double prezzo = piatto.calcolaPrezzo();
-            System.out.println("Il prezzo totale del piatto è: " + prezzo);
+                ordini.get(i).mostraIngredientiScelti();
+                double prezzo = ordini.get(i).calcolaPrezzo();
 
+                System.out.println("Prezzo: " + prezzo + "\n");
+                totale += prezzo;
+            }
+            System.out.println("Prezzo totale dell'ordine: " + totale);
         } else {
-            System.out.println("Nessun ingrediente scelto");
+            System.out.println("Nessun panino ordinato.");
         }
 
+        System.out.println("Grazie per aver ordinato. Arrivederci!");
     }
 }

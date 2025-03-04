@@ -1,5 +1,3 @@
-package data_04_03_2025;
-
 import java.util.ArrayList;
 
 public class PiattoSpeciale {
@@ -8,28 +6,36 @@ public class PiattoSpeciale {
     private ArrayList<String> ingredientiDisponibili = new ArrayList<String>();
     private ArrayList<Double> prezziIngredienti = new ArrayList<Double>();
     private ArrayList<String> ingredientiScelti = new ArrayList<String>();
+    private ArrayList<Integer> quantitaIngredienti = new ArrayList<>();
 
     public PiattoSpeciale() {
         ingredientiDisponibili.add("Panino normale");
         prezziIngredienti.add(2.0);
+        quantitaIngredienti.add(2);
 
         ingredientiDisponibili.add("Panino al sesamo");
         prezziIngredienti.add(3.0);
+        quantitaIngredienti.add(1);
 
         ingredientiDisponibili.add("Hamburger");
         prezziIngredienti.add(4.0);
+        quantitaIngredienti.add(3);
 
         ingredientiDisponibili.add("Pollo");
         prezziIngredienti.add(3.5);
+        quantitaIngredienti.add(0);
 
         ingredientiDisponibili.add("Insalata");
         prezziIngredienti.add(1.0);
+        quantitaIngredienti.add(2);
 
         ingredientiDisponibili.add("Pomodoro");
         prezziIngredienti.add(1.0);
+        quantitaIngredienti.add(2);
 
         ingredientiDisponibili.add("Cipolla");
         prezziIngredienti.add(1.0);
+        quantitaIngredienti.add(0);
     }
 
     public void mostraIngredienti() {
@@ -41,8 +47,16 @@ public class PiattoSpeciale {
 
     }
 
+    public boolean isAvailable(String ingr) {
+        if (ingredientiDisponibili.contains(ingr)
+                && quantitaIngredienti.get(ingredientiDisponibili.indexOf(ingr)) > 0) {
+            return true;
+        } else
+            return false;
+    }
+
     public void aggiungiIngrediente(String ingr) {
-        if (ingredientiDisponibili.contains(ingr)) {
+        if (isAvailable(ingr)) {
             ingredientiScelti.add(ingr);
         } else {
             System.out.println("Ingrediente non disponibile");
