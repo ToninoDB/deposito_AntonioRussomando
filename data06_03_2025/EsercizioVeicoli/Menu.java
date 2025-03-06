@@ -14,22 +14,22 @@ public class Menu {
         while (!exitMainMenu) {
             clear();
             stampaMenuPrincipale();
-            scelta = getInt(scanner);
+            scelta = controlloInputInteri(scanner);
 
             switch (scelta) {
                 case 1:
 
                     System.out.print("Tipo di veicolo (automobile/moto/camion): ");
-                    String tipo = scanner.nextLine();
+                    String tipo = controlloTipoMoto(scanner);
 
                     System.out.print("Marca: ");
-                    String marca = scanner.nextLine();
+                    String marca = controlloInputStringhe(scanner);
 
                     System.out.print("Modello: ");
-                    String modello = scanner.nextLine();
+                    String modello = controlloInputStringhe(scanner);
 
                     System.out.print("Anno di produzione: ");
-                    int anno = scanner.nextInt();
+                    int anno = controlloAnnoProduzione(scanner);
 
                     scanner.nextLine();
 
@@ -39,7 +39,7 @@ public class Menu {
                         scanner.nextLine();
 
                         System.out.print("Tipo di carburante: ");
-                        String carburante = scanner.nextLine();
+                        String carburante = controlloInputStringhe(scanner);
 
                         gestoreVeicoli.aggiungiVeicolo(new Automobile(marca, modello, anno, porte, carburante));
                     } else if (tipo.equalsIgnoreCase("moto")) {
@@ -55,7 +55,7 @@ public class Menu {
                         double capacita = scanner.nextDouble();
 
                         System.out.print("Numero di assi: ");
-                        int assi = scanner.nextInt();
+                        int assi = controlloInputInteri(scanner);
 
                         gestoreVeicoli.aggiungiVeicolo(new Camion(marca, modello, anno, capacita, assi));
                     } else {
@@ -100,14 +100,22 @@ public class Menu {
         System.out.print("Scegli un'opzione (0-3): ");
     }
 
-    // Metodo per il controllo di un int
-    public int getInt(Scanner scanner) {
+    // Metodo per controllare l'input intero positivo
+    public static int controlloInputInteri(Scanner scanner) {
         while (true) {
-            try {
-                return Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Errore: inserire un numero intero valido.");
+            // Controllo se l'input è un intero
+            if (!scanner.hasNextInt()) {
+                System.out.print("Devi inserire un numero intero. Riprova: ");
+                scanner.next(); // Scarta l'input errato
+                continue;
             }
+
+            int valore = scanner.nextInt();
+            if (valore >= 0) {
+                return valore; // Ritorna solo se è un numero valido
+            }
+
+            System.out.print("Il numero non può essere negativo. Riprova: ");
         }
     }
 
@@ -122,9 +130,44 @@ public class Menu {
         }
     }
 
+    // Metodo per pulire il cmd
     private static void clear() throws InterruptedException {
         Thread.sleep(3000);
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
+    // Metodo per controllare l'anno di produzione corretto
+    public static int controlloAnnoProduzione(Scanner scanner) {
+        while (true) {
+            System.out.print("Inserisci l'anno di produzione (1800-2025): ");
+            if (scanner.hasNextInt()) {
+                int valore = scanner.nextInt();
+                if (valore >= 1800 && valore <= 2025) {
+                    return valore;
+                } else {
+                    System.out.println("Errore: l'anno deve essere compreso tra 1800 e 2025.");
+                }
+            } else {
+                System.out.println("Errore: inserire un numero valido.");
+                scanner.next(); // Scarta l'input non valido
+            }
+        }
+    }
+
+    // Metodo per controllare l'inserimento del tipo di moto corretto
+    public static String controlloTipoMoto(Scanner scanner) {
+        while (true) {
+            System.out.print("Inserisci il tipo di moto (stradale, cross, scooter): ");
+            String tipo = scanner.nextLine().trim();
+
+            if (tipo.equalsIgnoreCase("stradale") || tipo.equalsIgnoreCase("cross")
+                    || tipo.equalsIgnoreCase("scooter")) {
+                return tipo;
+            } else {
+                System.out.println("Errore: inserire un tipo di moto valido (stradale, cross, scooter).");
+            }
+        }
+    }
+
 }
