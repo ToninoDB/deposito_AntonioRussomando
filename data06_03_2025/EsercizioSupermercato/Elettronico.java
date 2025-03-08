@@ -1,4 +1,3 @@
-package data06_03_2025.EsercizioSupermercato;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,8 +7,9 @@ public class Elettronico extends Prodotto implements IGarantibile, IRestituibile
     private int garanzia;
 
     // Costruttore
-    public Elettronico(int codiceId_plc, String nomeProdotto_plc, double prezzo_plc, int garanzia_plc) {
-        super(codiceId_plc, nomeProdotto_plc, prezzo_plc);
+    public Elettronico(String nomeProdotto_plc, double prezzo_plc, int quantita_plc,
+            int garanzia_plc) {
+        super(nomeProdotto_plc, prezzo_plc, quantita_plc);
         this.garanzia = garanzia_plc;
     }
 
@@ -35,5 +35,4 @@ public class Elettronico extends Prodotto implements IGarantibile, IRestituibile
     public boolean restituzione() {
         return inGaranzia();
     }
-
 }
