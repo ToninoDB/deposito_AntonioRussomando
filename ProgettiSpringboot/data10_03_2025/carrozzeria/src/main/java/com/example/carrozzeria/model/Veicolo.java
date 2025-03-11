@@ -4,9 +4,16 @@ import java.util.Date;
 
 import com.example.carrozzeria.model.enums.Stato;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class Veicolo {
     private int id;
+    @NotBlank(message = "Il campo marca non può essere vuoto!")
+    @Size(min = 2, max = 50, message = "La marca deve avere tra 2 e 50 caratteri!")
     private String marca;
+    @NotBlank(message = "Il campo targa non può essere vuoto!")
+    @Size(min = 7, max = 7, message = "La marca deve avere esattamente 7 caratteri!")
     private String targa;
     private Date dataIngressoOfficina;
     private Stato statoRiparazione;

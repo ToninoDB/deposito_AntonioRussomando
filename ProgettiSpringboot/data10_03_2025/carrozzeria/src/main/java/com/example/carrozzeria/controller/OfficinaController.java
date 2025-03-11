@@ -8,6 +8,8 @@ import com.example.carrozzeria.model.Veicolo;
 import com.example.carrozzeria.model.enums.Stato;
 import com.example.carrozzeria.service.OfficinaService;
 
+import jakarta.validation.Valid;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
@@ -45,7 +47,7 @@ public class OfficinaController {
 
     // Aggiunta di un nuovo veicolo
     @PostMapping
-    public ResponseEntity<Veicolo> aggiungiVeicolo(@RequestBody Veicolo veicolo) {
+    public ResponseEntity<Veicolo> aggiungiVeicolo(@Valid @RequestBody Veicolo veicolo) {
         Veicolo nuovoVeicolo = officinaService.addVehicle(veicolo);
         URI location = URI.create(String.format("api/veicoli/%s", nuovoVeicolo.getTarga()));
         return ResponseEntity.created(location).body(nuovoVeicolo);
@@ -65,7 +67,7 @@ public class OfficinaController {
 
     // Rimozione veicolo completato
     @DeleteMapping("/{targa}")
-    public ResponseEntity<Void> deleteVeicolo(@PathVariable String targa) {
+    public ResponseEntity<Void> deleteVeicolo(@Valid @PathVariable String targa) {
         boolean delete = officinaService.deleteByTarga(targa);
 
         return delete ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
