@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestione Veicoli</title>
+  </head>
+
+  <body>
+    <h1>Gestione Veicoli</h1>
+
+    <!-- Lista di tutti i veicoli -->
+    <h2>Tutti i Veicoli</h2>
+    <ul id="listaVeicoli"></ul>
+
+    <!-- Ricerca veicolo per targa -->
+    <h2>Trova Veicolo per Targa</h2>
+    <input
+      type="text"
+      id="cercaTarga"
+      placeholder="Inserisci la targa (es. AB123CD)"
+    />
+    <button onclick="cercaVeicolo()">Cerca</button>
+    <p id="risultatoVeicolo"></p>
+
+    <!-- Conteggio veicoli per stato -->
+    <h2>Conteggio Veicoli per Stato</h2>
+    <ul id="conteggioVeicoli"></ul>
+
+    <!-- Eliminazione di un veicolo -->
+    <h2>Elimina Veicolo per Targa</h2>
+    <input
+      type="text"
+      id="eliminaTarga"
+      placeholder="Inserisci la targa (es. AB123CD)"
+    />
+    <button onclick="eliminaVeicolo()">Elimina</button>
+    <p id="risultatoEliminazione"></p>
+
+    <script>
+      // Recupera tutti i veicoli
+      fetch("http://localhost:8080/api/veicoli")
+        .then((response) => response.json())
+        .then((veicoli) => {
+          const listaVeicoli = document.getElementById("listaVeicoli");
+          listaVeicoli.innerHTML = ""; // Pulisce prima di aggiornare
+          veicoli.forEach((veicolo) => {
+            const elementoLista = document.createElement("li");
+            elementoLista.textContent = `${veicolo.marca} ${veicolo.modello} - ${veicolo.targa} (${veicolo.statoRiparazione})`;
+            listaVeicoli.appendChild(elementoLista);
+          });
+        })
+        .catch((error) =>
+          console.error("Errore nel recupero dei veicoli:", error)
+        );
+
+      // Cerca veicolo per targa
+      function cercaVeicolo() {
+        const targa = document.getElementById("cercaTarga").value;
+        fetch(`http://localhost:8080/api/veicoli/${targa}`)
+          .then((response) => {
+            if (!response.ok) throw new Error("Veicolo non trovato");
+            return response.json();
+          })
+          .then((veicolo) => {
+            document.getElementById(
+              "risultatoVeicolo"
+            ).textContent = `${veicolo.marca} ${veicolo.modello} - ${veicolo.targa} (${veicolo.statoRiparazione})`;
+          })
+          .catch((error) => {
+            document.getElementById("risultatoVeicolo").textContent =
+              "Veicolo non trovato";
+          });
+      }
+
+      // Recupera il conteggio dei veicoli per stato
+      fetch("http://localhost:8080/api/veicoli/statoRiparazione")
+        .then((response) => response.json())
+        .then((conteggi) => {
+          const conteggioVeicoli = document.getElementById("conteggioVeicoli");
+          conteggioVeicoli.innerHTML = ""; // Pulisce prima di aggiornare
+          for (const [stato, conteggio] of Object.entries(conteggi)) {
+            const elementoLista = document.createElement("li");
+            elementoLista.textContent = `${stato}: ${conteggio}`;
+            conteggioVeicoli.appendChild(elementoLista);
+          }
+        })
+        .catch((error) =>
+          console.error("Errore nel recupero del conteggio dei veicoli:", error)
+        );
+
+      // Elimina un veicolo per targa
+      function eliminaVeicolo() {
+        const targa = document.getElementById("eliminaTarga").value;
+        fetch(`http://localhost:8080/api/veicoli/${targa}`, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (response.status === 204) {
+              // Eliminazione riuscita
+              document.getElementById(
+                "risultatoEliminazione"
+              ).textContent = `Veicolo con targa ${targa} eliminato con successo.`;
+              aggiornaListaVeicoli(); // Aggiorna la lista dopo eliminazione
+            } else if (response.status === 404) {
+              throw new Error("Veicolo non trovato");
+            } else {
+              throw new Error("Errore durante l'eliminazione");
+            }
+          })
+          .catch((error) => {
+            document.getElementById("risultatoEliminazione").textContent =
+              error.message;
+          });
+      }
+
+      // Aggiorna la lista dei veicoli dopo eliminazione o aggiornamento
+      function aggiornaListaVeicoli() {
+        fetch("http://localhost:8080/api/veicoli")
+          .then((response) => response.json())
+          .then((veicoli) => {
+            const listaVeicoli = document.getElementById("listaVeicoli");
+            listaVeicoli.innerHTML = ""; // Pulisce prima di aggiornare
+            veicoli.forEach((veicolo) => {
+              const elementoLista = document.createElement("li");
+              elementoLista.textContent = `${veicolo.marca} ${veicolo.modello} - ${veicolo.targa} (${veicolo.statoRiparazione})`;
+              listaVeicoli.appendChild(elementoLista);
+            });
+          })
+          .catch((error) =>
+            console.error("Errore nel recupero dei veicoli:", error)
+          );
+      }
+    </script>
+  </body>
+</html>
